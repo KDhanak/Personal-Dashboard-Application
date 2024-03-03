@@ -1,0 +1,47 @@
+version: "3.8"
+services:
+  backend: 
+    build:
+      context: ./backend/
+      dockerfile: dockerfile
+    command: > 
+      sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py createsuperuser_if_not_exists && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend/
+      dockerfile: dockerfile
+    command: npm start
+    volumes: 
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - CHOKIDAR_USEPOLLING=True
+  
+  db:
+    image: postgres
+    volumes: 
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+
+
+volumes:
+  postgres_data:
+  
+
