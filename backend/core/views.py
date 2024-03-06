@@ -17,20 +17,20 @@ from django.conf import settings
 
 
 class WeatherAPIView(APIView):
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
 
         apiKey = config("WEATHER_API_KEY")
+        if request.data.get("latitude") and request.data.get("longitude"):
+            lat = request.data.get("latitude")
+            lon = request.data.get("longitude")
+            response = requests.get(
+                f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={apiKey}&units=metric"
+            )
+            weather_data = response.json()
+            return JsonResponse(weather_data, safe=False)
 
-        # Fetch Data from the weatherAPI
-        response = requests.get(
-            f"https://api.openweathermap.org/data/2.5/weather?lat=-37.81&lon=144.96&appid={apiKey}&units=metric")
 
-        response = requests.get(
-            f"http://api.openweathermap.org/geo/1.0/zip?zip=3125,AU&appid={apiKey}")
-        weather_data = response.json()
-        return JsonResponse(weather_data, safe=False)
-
-    # The class-based view to consume the newsAPI(NewsAPI)
+# The class-based view to consume the newsAPI(NewsAPI)
 
 
 class NewsAPIView(APIView):
