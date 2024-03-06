@@ -1,27 +1,14 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { useEffect } from 'react';
-import axios from "axios";
+import News from './components/News/News'
+import Weather from './components/weather/Weather'
 
 function App() {
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try{
-        const response = await axios.get("http://localhost:8000/core/weather")
-        console.log(response.data["lat"])
-      }catch (error){
-        console.error("Error fetching data", error)
-      }
-    }
-    fetchData();
-  }, [])
-
   return (
     <div className="App">
-      <header className="App-header">
-      </header>
+      <News />
+      <Weather />
     </div>
   );
 }
