@@ -6,3 +6,4 @@ pillow >= 10.2.0
 psycopg2-binary >= 2.9.9
 python-decouple >= 3.8
 requests >= 2.31.0
+todoist-api-python >= 2.1.3

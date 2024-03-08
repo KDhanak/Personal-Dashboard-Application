@@ -15,9 +15,6 @@ const currentTime = `${hours}:${minutes}:${seconds}`;
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const currentDay = daysOfWeek[localDate.getDay()];
 
-console.log(currentTime); // Output the current time
-console.log(currentDay);  // Output the current day
-
 return { currentDay, currentTime}
 
 }
