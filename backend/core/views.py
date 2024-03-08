@@ -10,6 +10,9 @@ import requests
 from decouple import config
 from django.core.mail import send_mail
 from django.conf import settings
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -34,14 +37,25 @@ class WeatherAPIView(APIView):
 
 
 class NewsAPIView(APIView):
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        apiKey = config("NEWS_API_KEY")
+        query = request.data.get("search")
+
+        response = requests.get(
+            f"https://newsapi.org/v2/everything?q={query}&apiKey={apiKey}")
+        news_data = response.json()
+        if news_data:
+            return JsonResponse(news_data, status=status.HTTP_200_OK)
+
+    def get(self, *args, **kwargs):
         apiKey = config("NEWS_API_KEY")
 
-        # Fetch Data from the newsAPI
         response = requests.get(
-            f"https://newsapi.org/v2/everything?q=bitcoin&apiKey={apiKey}")
+            f"https://newsapi.org/v2/top-headlines?country=au&apiKey={apiKey}"
+        )
         news_data = response.json()
-        return JsonResponse(news_data, safe=False)
+        if news_data:
+            return JsonResponse(news_data, status=status.HTTP_200_OK)
 
 
 # The class-based view to create new accounts
