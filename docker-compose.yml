@@ -1,46 +1,60 @@
+# Docker Compose version
 version: "3.8"
+
+# Define services for backend, frontend, and database
 services:
-  backend: 
+  # Backend service
+  backend:
+    # Build backend service from the specified context and Dockerfile
     build:
       context: ./backend/
       dockerfile: dockerfile
-    command: > 
+    # Command to run migrations, create superuser, and start the Django server
+    command: >
       sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py createsuperuser_if_not_exists && python manage.py runserver 0.0.0.0:8000"
+    # Mount the local backend directory to the /app directory inside the container
     volumes:
       - ./backend:/app
+    # Expose port 8000 for external access
     ports:
       - "8000:8000"
+    # Specify the .env file for environment variables
     env_file:
       - .env
-    depends_on:
-      - db
+    # Depend on the db service to ensure it starts first
 
+  # Frontend service
   frontend:
+    # Build frontend service from the specified context and Dockerfile
     build:
       context: ./frontend/
       dockerfile: dockerfile
-    command: > 
+    # Command to start the frontend application
+    command: >
       sh -c "npm start"
+    # Mount the local frontend directory to the /app directory inside the container
     volumes: 
       - ./frontend:/app
+    # Expose port 3000 for external access
     ports:
       - "3000:3000"
-    depends_on:
-      - backend
-  
+    # Depend on the backend service to ensure it starts first
+
+  # Database service using the official Postgres image
   db:
     image: postgres
+    # Mount volume for persistent database data
     volumes: 
       - postgres_data:/var/lib/postgresql/data
+    # Specify the .env file for environment variables
     env_file:
       - .env
+    # Set environment variables for Postgres
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
 
-
+# Define a named volume for persistent Postgres data
 volumes:
   postgres_data:
-  
-
