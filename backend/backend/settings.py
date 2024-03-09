@@ -27,9 +27,6 @@ SECRET_KEY = "django-insecure-5v)b8$!t@paw&!o*q1cj8zfggf)32-dh%0w@0yw2^pjkyi08zj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost"]
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -86,7 +83,7 @@ WSGI_APPLICATION = "backend.wsgi.application"
 #     }
 # }
 
-# Postgres Database
+# Postgres Database (This is not actually used, I have set it up for future use.)
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",

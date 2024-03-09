@@ -1,11 +1,17 @@
+# Use the official Python 3.11.4 base image
 FROM python:3.11.4
 
+# Set the working directory inside the container to /app
 WORKDIR /app
 
+# Copy the requirements.txt file from the local directory to /app
 COPY requirements.txt ./
 
+# Install Python dependencies listed in requirements.txt
 RUN pip install -r requirements.txt
 
+# Copy the entire local directory to /app in the container
 COPY . ./
 
+# Inform Docker that the application inside the container will use port 8000
 EXPOSE 8000
